@@ -13,7 +13,7 @@ services:
       #
       # Windows example (use forward slashes):
       #   - C:/Users/YourName/my_experiment:/data/raw
-      - ./:/data/raw
+      - /EDIT_THIS_PATH:/data/raw
     environment:
       # Uncomment and set these if output files end up owned by root:
       # HOST_UID: "1000"

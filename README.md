@@ -30,9 +30,11 @@ Thermo .raw files
   _pos.mzML  +  _neg.mzML  (one file per polarity per sample)
 ```
 
-- **Step 1** applies vendor peak picking (Thermo centroiding) and records SHA-1 checksums of source files in each mzML header
-- **Step 2** splits on PSI-MS CV terms `MS:1000130` (positive) and `MS:1000129` (negative) — zero polarity cross-contamination
+- **Step 1** applies vendor (Thermo) centroiding — profile data is not preserved. Outputs indexed mzML with instrument metadata JSON (`-m 1`)
+- **Step 2** splits on PSI-MS CV terms `MS:1000130` (positive) and `MS:1000129` (negative); output files are plain (non-indexed) mzML
 - Works with any Thermo Orbitrap acquisition type (LC-MS, DI-MS, GC-MS)
+
+> **DDA / MS2 note:** In data-dependent acquisition mode, MS2 spectra typically do not carry an explicit polarity CV term — polarity is inherited from the triggering MS1 scan. `split_polarity.py` only splits spectra with explicit polarity tags; MS2 spectra without them are silently dropped. For DI-MS and full-scan LC-MS (MS1 only) this has no effect. For DDA workflows with MS2 data, use a dedicated converter (e.g. MSConvert with scan filter).
 
 ---
 
@@ -96,7 +98,7 @@ Requirements: Mono, Python 3 with lxml, ThermoRawFileParser v1.4.5
 mono /path/to/ThermoRawFileParser.exe \
   -d /path/to/raw \
   -o /path/to/raw/mzML \
-  -f 2 -m 0 -l 1
+  -f 2 -m 1 -l 2
 
 # Step 2 — split
 MZML_DIR=/path/to/raw/mzML python3 split_polarity.py

@@ -15,7 +15,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install lxml pytest
+        run: pip install "lxml==5.3.0" "pytest==8.3.5"
 
       - name: Run tests
         run: pytest tests/ -v

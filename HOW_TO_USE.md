@@ -156,7 +156,7 @@ Yes — Mac (Apple Silicon and Intel), Windows, and Linux are all supported.
 Around 2–5 seconds per file for conversion plus a few seconds for splitting. A batch of 16 files typically completes in under 2 minutes.
 
 **Does it work for LC-MS data, not just DI-MS?**
-Yes. The conversion and polarity splitting work for any Thermo Orbitrap `.raw` file regardless of acquisition mode.
+Yes for full-scan (MS1-only) LC-MS — conversion and polarity splitting work correctly. For data-dependent acquisition (DDA) with MS2 fragmentation spectra: MS2 spectra often lack an explicit polarity tag in the mzML and will be silently dropped during splitting. If your workflow requires MS2 spectra in the split files, use MSConvert with a scan-level polarity filter instead.
 
 **Something went wrong and I don't understand the error.**
 Open an issue at [https://github.com/AliA-Mohamed/raw2mzml/issues](https://github.com/AliA-Mohamed/raw2mzml/issues) and paste the full terminal output.

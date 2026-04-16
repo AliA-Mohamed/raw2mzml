@@ -29,7 +29,7 @@ divider
 [ -d "$RAW_DIR" ] || error "Input directory not found: $RAW_DIR
   Mount your .raw folder with: -v /your/folder:/data/raw"
 
-RAW_COUNT=$(find "$RAW_DIR" -maxdepth 1 -name "*.raw" -o -name "*.RAW" 2>/dev/null | wc -l | tr -d ' ')
+RAW_COUNT=$(find "$RAW_DIR" -maxdepth 1 \( -name "*.raw" -o -name "*.RAW" \) 2>/dev/null | wc -l | tr -d ' ')
 [ "$RAW_COUNT" -gt 0 ] || error "No .raw files found in $RAW_DIR
   Make sure you mounted the correct folder containing your Thermo .raw files."
 
@@ -54,7 +54,7 @@ mono "$PARSER" \
     -d "$RAW_DIR" \
     -o "$MZML_DIR" \
     -f 2 \
-    -m 0 \
+    -m 1 \
     -l 2 2>&1 \
   | grep -E "^20|INFO|ERROR|WARN|Processing completed" \
   | sed 's/^/  /'
@@ -76,7 +76,9 @@ mkdir -p "$SPLIT_DIR"
 # Override the default paths used by split_polarity.py
 MZML_DIR="$MZML_DIR" python3 "$SPLITTER" 2>&1 | sed 's/^/  /'
 
-SPLIT_COUNT=$(find "$SPLIT_DIR" -name "*.mzML" 2>/dev/null | wc -l | tr -d ' ')
+POS_COUNT=$(find "$SPLIT_DIR" -name "*_pos.mzML" 2>/dev/null | wc -l | tr -d ' ')
+NEG_COUNT=$(find "$SPLIT_DIR" -name "*_neg.mzML" 2>/dev/null | wc -l | tr -d ' ')
+SPLIT_COUNT=$((POS_COUNT + NEG_COUNT))
 
 # ── Fix ownership ──────────────────────────────────────────────────────────────
 if [ "$HOST_UID" != "0" ]; then
@@ -90,7 +92,7 @@ echo -e "  ${GREEN}✓ Pipeline complete${NC}"
 echo ""
 echo "  Raw files      : $RAW_COUNT"
 echo "  mzML (combined): $MZML_COUNT"
-echo "  mzML (split)   : $SPLIT_COUNT  ($((SPLIT_COUNT / 2)) pos + $((SPLIT_COUNT / 2)) neg)"
+echo "  mzML (split)   : $SPLIT_COUNT  ($POS_COUNT pos + $NEG_COUNT neg)"
 echo ""
 echo "  Results written to:"
 echo "    $MZML_DIR/"
