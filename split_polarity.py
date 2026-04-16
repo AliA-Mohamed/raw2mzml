@@ -48,6 +48,12 @@ def split_mzml(input_path, output_dir):
 
     Uses in-place tree mutation to avoid deep-copying the full DOM twice,
     keeping peak memory close to 1× the file size rather than 3×.
+
+    Output files are plain (non-indexed) mzML regardless of whether the
+    input was an indexedmzML wrapper — the byte-offset index block is not
+    recomputed. This is intentional: MS-DIAL and lipidr do not require
+    indexed mzML. Chromatograms (TIC/BPC) are written to both output files
+    unchanged; they carry no polarity information and are instrument-level.
     """
     basename = os.path.splitext(os.path.basename(input_path))[0]
     print(f"  Parsing {basename}.mzML ...", end=" ", flush=True)

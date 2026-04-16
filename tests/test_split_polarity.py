@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from split_polarity import NS, NEG_CV, POS_CV, split_mzml
 
 FIXTURE = os.path.join(os.path.dirname(__file__), "fixtures", "mixed.mzML")
+INDEXED_FIXTURE = os.path.join(os.path.dirname(__file__), "fixtures", "indexed_mixed.mzML")
 
 
 def test_output_files_created(tmp_path):
@@ -63,6 +64,17 @@ def test_malformed_xml_skipped(tmp_path, capsys):
     split_mzml(str(bad), str(tmp_path))  # must not raise
     captured = capsys.readouterr()
     assert "WARN" in captured.err
+
+
+def test_indexed_mzml_wrapper(tmp_path):
+    """indexedmzML root element is unwrapped; spectra are split correctly."""
+    split_mzml(INDEXED_FIXTURE, str(tmp_path))
+    assert (tmp_path / "indexed_mixed_pos.mzML").exists()
+    assert (tmp_path / "indexed_mixed_neg.mzML").exists()
+    pos_tree = etree.parse(str(tmp_path / "indexed_mixed_pos.mzML"))
+    neg_tree = etree.parse(str(tmp_path / "indexed_mixed_neg.mzML"))
+    assert len(pos_tree.findall(f".//{{{NS}}}spectrum")) == 1
+    assert len(neg_tree.findall(f".//{{{NS}}}spectrum")) == 1
 
 
 def test_no_polarity_spectra_no_output(tmp_path):
