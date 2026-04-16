@@ -16,9 +16,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# ── ThermoRawFileParser v1.4.5 ─────────────────────────────────────────────────
+# ── ThermoRawFileParser (version pinned, overridable at build time) ────────────
+ARG TRFP_VERSION=1.4.5
 RUN curl -fsSL \
-    "https://github.com/compomics/ThermoRawFileParser/releases/download/v1.4.5/ThermoRawFileParser1.4.5.zip" \
+    "https://github.com/compomics/ThermoRawFileParser/releases/download/v${TRFP_VERSION}/ThermoRawFileParser${TRFP_VERSION}.zip" \
     -o /tmp/ThermoRawFileParser.zip \
     && unzip -q /tmp/ThermoRawFileParser.zip -d /opt/ThermoRawFileParser \
     && rm /tmp/ThermoRawFileParser.zip

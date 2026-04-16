@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mzML xmlns="http://psi.hupo.org/ms/mzml">
+  <fileDescription>
+    <fileContent>
+      <cvParam cvRef="MS" accession="MS:1000580" name="MSn spectrum" value=""/>
+    </fileContent>
+  </fileDescription>
+  <run>
+    <spectrumList count="4" defaultDataProcessingRef="dp1">
+      <spectrum index="0" id="scan=1" defaultArrayLength="0">
+        <cvParam cvRef="MS" accession="MS:1000130" name="positive scan" value=""/>
+      </spectrum>
+      <spectrum index="1" id="scan=2" defaultArrayLength="0">
+        <cvParam cvRef="MS" accession="MS:1000129" name="negative scan" value=""/>
+      </spectrum>
+      <spectrum index="2" id="scan=3" defaultArrayLength="0">
+        <cvParam cvRef="MS" accession="MS:1000130" name="positive scan" value=""/>
+      </spectrum>
+      <spectrum index="3" id="scan=4" defaultArrayLength="0">
+        <!-- no polarity cvParam — should be skipped -->
+      </spectrum>
+    </spectrumList>
+  </run>
+</mzML>
