@@ -1,0 +1,23 @@
+services:
+  raw2mzml:
+    image: raw2mzml:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # Edit the left side to point to your folder of .raw files.
+      # Leave the right side (/data/raw) unchanged.
+      #
+      # Mac / Linux example:
+      #   - ~/my_experiment:/data/raw
+      #
+      # Windows example (use forward slashes):
+      #   - C:/Users/YourName/my_experiment:/data/raw
+      - ./:/data/raw
+    environment:
+      # Uncomment and set these if output files end up owned by root:
+      # HOST_UID: "1000"
+      # HOST_GID: "1000"
+      RAW_DIR: /data/raw
+    # Remove the next line if you want to keep the container after it exits
+    # (useful for debugging: docker logs raw2mzml-raw2mzml-1)
