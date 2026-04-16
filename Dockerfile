@@ -6,7 +6,7 @@ LABEL version="1.0"
 
 # ── System deps ────────────────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        mono-runtime \
+        mono-complete \
         ca-certificates \
         curl \
         unzip \
