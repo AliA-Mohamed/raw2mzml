@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-PARSER="/opt/ThermoRawFileParser/ThermoRawFileParser.exe"
+PARSER="/opt/ThermoRawFileParser/ThermoRawFileParser"
 SPLITTER="/opt/pipeline/split_polarity.py"
 RAW_DIR="${RAW_DIR:-/data/raw}"
 MZML_DIR="${MZML_DIR:-/data/raw/mzML}"
@@ -22,7 +22,7 @@ divider() { echo "────────────────────�
 
 divider
 echo "  raw2mzml — Thermo .raw to polarity-split .mzML"
-echo "  ThermoRawFileParser v1.4.5 + polarity splitter"
+echo "  ThermoRawFileParser v2.0.0 (.NET 8) + polarity splitter"
 divider
 
 # ── Validate input ─────────────────────────────────────────────────────────────
@@ -50,14 +50,14 @@ divider
 
 mkdir -p "$MZML_DIR"
 
-mono "$PARSER" \
+"$PARSER" \
     -d "$RAW_DIR" \
     -o "$MZML_DIR" \
     -f 2 \
     -m 1 \
     -l 2 2>&1 \
   | grep -E "^20|INFO|ERROR|WARN|Processing completed" \
-  | sed 's/^/  /'
+  | sed 's/^/  /' || true
 
 MZML_COUNT=$(find "$MZML_DIR" -maxdepth 1 -name "*.mzML" 2>/dev/null | wc -l | tr -d ' ')
 [ "$MZML_COUNT" -gt 0 ] || error "Conversion produced no mzML files. Check that your .raw files are valid Thermo files."

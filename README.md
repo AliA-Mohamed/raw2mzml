@@ -23,7 +23,7 @@ Output appears in your folder under `mzML/` and `mzML/split/`.
 ```
 Thermo .raw files
        │
-       ▼  Step 1 — ThermoRawFileParser v1.4.5 (Mono)
+       ▼  Step 1 — ThermoRawFileParser v2.0.0 (.NET 8, no Mono)
   .mzML  (indexed mzML, centroided, both polarities combined)
        │
        ▼  Step 2 — split_polarity.py (Python + lxml)
@@ -62,7 +62,7 @@ your-data-folder/
 
 | File | Purpose |
 |---|---|
-| `Dockerfile` | Debian slim + Mono + Python 3 + lxml + ThermoRawFileParser v1.4.5 |
+| `Dockerfile` | Debian slim (linux/amd64) + .NET 8 + Python 3 + lxml + ThermoRawFileParser v2.0.0 |
 | `run_pipeline.sh` | Container entrypoint — validates input, runs both steps, fixes file ownership |
 | `split_polarity.py` | Splits interleaved mzML by polarity CV term |
 | `docker-compose.yml` | Convenience wrapper — edit volume path, then `docker compose up` |
@@ -91,10 +91,10 @@ docker run --rm \
 
 ## Running without Docker
 
-Requirements: Mono, Python 3 with lxml, ThermoRawFileParser v1.4.5
+Requirements: Python 3 with lxml, ThermoRawFileParser (v1.4.5 via Mono on macOS/Linux, or native on Windows)
 
 ```bash
-# Step 1 — convert
+# Step 1 — convert (macOS/Linux with Mono installed locally)
 mono /path/to/ThermoRawFileParser.exe \
   -d /path/to/raw \
   -o /path/to/raw/mzML \
